@@ -1,16 +1,22 @@
+// vamos importar o hooks useEffect = para carregar a lista de usuarios vinda da api
+// e importar a useState = para modificar as varaveis em tempo real
+import axios from "axios";
+import {useEffect, useState} from "react";
+
 function App() {
 
-// vamos criar um array para deixar a tabela dinamica, para prepara-la para a api
-// vamos criar um array javascript
-// os atributos pegamos como mostrado na api
+// alterando o array para pegar na api
+// a const= criamos uma variavel users e usamos o setUsers para atribuir valores de forma dinamicamente nela
+      const [ users, setUsers] = useState([]);
 
-  const lista_users = [
-    
-      {name: "User1", email: "user1.teste@gmail.com", created_at: "2022-02-02"},
-      {name: "User2", email: "user2.teste@gmail.com", created_at: "2022-04-12"},
-      {name: "User34", email: "user34.teste@gmail.com", created_at: "2022-05-10"},
-  
-  ]
+//  o useEffect serve para executal a consulta com a lib axios, toda vez que acessar a pagina,o use vai chamr a consulta 
+// e quando terminar vai atribuir esse carregamento ao setUsers
+      useEffect(() => {
+        axios.get('https://iot.14mob.com/api-fiap/public/index.php/users').then(resposta => {
+          setUsers(resposta.data.users);
+        }).catch(error => console.log(error));
+      },[])
+
   return (
       <div>
         <table border="1">
@@ -24,7 +30,7 @@ function App() {
           <tbody>
 {/* Para utilizarmos javascript dentro do html do react, ele deve estar entre chaves {}
 vamos utilizzar a função map do javascript =  invoca a função callback (passada por argumento) para cada elemento do Array e devolve um novo Array como resultado. */}
-            { lista_users.map(user => {
+            { users.map(user => {
             return  <tr>
                       <td>{user.name}</td>
                       <td>{user.email}</td>
